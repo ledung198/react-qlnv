@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import { AddDepModal } from './AddDepModal';
 import { Edit } from './Edit';
 
 export class Get extends Component {
     constructor(props) {
         super(props);
-        this.state = { deps: [], addModalShow: false, editModalShow: false }
+        this.state = {
+            deps: [],
+            editModalShow: false,
+            term: '',
+        }
+        this.searchHandler = this.searchHandler.bind(this);
+    }
+
+    searchHandler(event) {
+        this.setState({
+            term: event.target.value
+        })
     }
     componentDidMount() {
         this.refreshList();
@@ -38,14 +48,14 @@ export class Get extends Component {
     render() {
 
         const { deps, depmaNv, dephoTen, depdanToc, depgioiTinh, depdiaChi, depngaySinh, depsoDT, depmaCv, depmaPb, depbacLuong } = this.state;
-        let addModalClose = () => this.setState({ addModalShow: false });
         let editModalClose = () => this.setState({ editModalShow: false })
         return (
             <div>
+                <h1 style={{textAlign:"center"}}>Thông tin nhân viên</h1>
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
-                            <th>Mã Nhân Viên</th>
+                            <th>Mã NV</th>
                             <th>Họ Tên</th>
                             <th>Dân Tộc</th>
                             <th>Giới Tính</th>
@@ -56,7 +66,9 @@ export class Get extends Component {
                             <th>Tên Chức vụ</th>
                             <th>Mã Phòng Ban</th>
                             <th>Tên Phòng Ban</th>
-                            <th>Bậc Luong</th>
+                            <th>Bậc Lương</th>
+                            <th>Lương cơ bản</th>
+                            <th>Lương tháng</th>
                             <th>Option</th>
                         </tr>
                     </thead>
@@ -69,12 +81,14 @@ export class Get extends Component {
                                 <td>{dep.GioiTinh}</td>
                                 <td>{dep.DiaChi}</td>
                                 <td>{dep.NgaySinh}</td>
-                                <td>{dep.SoDT}</td>
+                                <td>{"0"+dep.SoDT}</td>
                                 <td>{dep.MaCV}</td>
                                 <td>{dep.TenCV}</td>
                                 <td>{dep.MaPB}</td>
                                 <td>{dep.TenPhongBan}</td>
                                 <td>{dep.BacLuong}</td>
+                                <td>{dep.LuongCB}</td>
+                                <td>{dep.LuongCB*30}</td>
                                 <td>
                                     <ButtonToolbar>
                                         <Button className="mr-2" variant="info" onClick={() => this.setState({ editModalShow: true, depmaNv: dep.MaNv, dephoTen: dep.HoTen, depdanToc: dep.DanToc, depgioiTinh: dep.GioiTinh, depdiaChi: dep.DiaChi, depngaySinh: dep.NgaySinh, depsoDT: dep.SoDT, depmaCv: dep.MaCV, depmaPb: dep.MaPB, depbacLuong: dep.BacLuong })}>Sửa</Button>
@@ -93,21 +107,14 @@ export class Get extends Component {
                                             depbacLuong={depbacLuong}
                                         />
                                         <Button className="mr-2"
-                                        onClick={()=>this.deleteDep(dep.MaNv)} variant="danger"
+                                            onClick={() => this.deleteDep(dep.MaNv)} variant="danger"
                                         >Delete</Button>
                                     </ButtonToolbar>
                                 </td>
                             </tr>
                         )}
                     </tbody>
-
                 </Table>
-                <ButtonToolbar>
-                    <Button variant="primary" onClick={() => this.setState({ addModalShow: true })}>
-                        Thêm
-                    </Button>
-                    <AddDepModal show={this.state.addModalShow} onHide={addModalClose} />
-                </ButtonToolbar>
             </div>
         )
     }

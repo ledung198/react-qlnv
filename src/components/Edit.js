@@ -16,12 +16,9 @@ export class Edit extends Component {
             console.log(key, event.target[key])
             url += `${event.target[key].name}=${event.target[key].value}&`
         }
-
         console.log(url)
 
         // Fetch
-
-        // THen
         fetch(url, {
             method: 'PUT',
             headers: {
@@ -43,10 +40,10 @@ export class Edit extends Component {
         })
             .then(res => res.json())
             .then((result) => {
-                alert(result)
+                alert('Sửa thành công')
             },
                 (error) => {
-                    alert('Failed')
+                    alert('Sửa thất bại')
                 })
     }
     render() {
